@@ -1,0 +1,12 @@
+image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+
+pages:
+  stage: deploy
+  script:
+    - aws deploy push --application-name python_flask --s3-location s3://aws-python-flask/artifacts.zip --source public/
+    - aws deploy create-deployment --application-name python_flask --deployment-group-name python_flask_group --s3-location bucket=aws-python-flask,bundleType=zip,key=artifacts.zip
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
